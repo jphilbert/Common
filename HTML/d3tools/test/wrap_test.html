@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="../../utility/d3/d3.v3.min.js"></script>
+<script src="../../utility/underscore/underscore-min.js"></script>
+<script src="../d3Tools.js"></script>
+    
+<body>
+  <h1>Text Wrap Test</h1>
+  <div id="table"></div>
+  <script>
+   var svg = d3.select("#table").append("svg");
+   var y = 0;
+   var width = 200;
+   var height = 100;
+   svg.append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+
+   svg.append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", width / 2)
+      .attr("height", height / 2)
+      .attr("fill", "grey")
+      .attr("fill-opacity", 0.2);
+
+   svg.append("rect")
+      .attr("x", width / 2)
+      .attr("y", height / 2)
+      .attr("width", width / 2)
+      .attr("height", height / 2)
+      .attr("fill", "grey")
+      .attr("fill-opacity", 0.2);
+
+   svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", y + height / 2)
+      .attr("dy", "0.35em")
+      .text("This is a very very very very very long Sentence")
+      .attr("font-size", height)
+      .attr("text-anchor", "middle");
+
+   y += height * 1.5;
+   svg.append("rect")
+      .attr("x", 0)
+      .attr("y", y)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+   
+   svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", y + height / 2)
+      .attr("dy", "0.35em")
+      .text("This is Two Lines")
+      .attr("font-size", height)
+      .attr("text-anchor", "middle");
+
+   svg.append("rect")
+      .attr("x", width * 1.5)
+      .attr("y", y)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+
+   svg.append("text")
+      .attr("x", (width * 1.5) + width / 2)
+      .attr("y", y + height / 2)
+      .attr("dy", "0.35em")
+      .text("Jst 1")
+      .attr("font-size", height)
+      .attr("text-anchor", "middle");
+   
+   
+   y += height * 1.5;
+   svg.append("rect")
+      .attr("x", width / 2)
+      .attr("y", y)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+
+   svg.append("text")
+      .attr("x", width)
+      .attr("y", y)
+      .attr("dy", "1em")
+      .text("This is Top Aligned with font 20")
+      .attr("font-size", 20)
+      .attr("text-anchor", "middle");
+   
+   y += height * 1.5;
+   svg.append("rect")
+      .attr("x", 0)
+      .attr("y", y)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+
+   svg.append("text")
+      .attr("x", 0)
+      .attr("y", y + height / 2)
+      .attr("dy", "0.35em")
+      .text("This is Left Aligned")
+      .attr("font-size", height)
+      .attr("text-anchor", "start");
+
+   svg.append("rect")
+      .attr("x", width * 1.5)
+      .attr("y", y)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+
+   svg.append("text")
+      .attr("x", width * 2.5)
+      .attr("y", y + height / 2)
+      .attr("dy", "0.35em")
+      .text("This is Right Aligned")
+      .attr("font-size", height)
+      .attr("text-anchor", "end");
+
+   y += height * 1.5;
+   svg.append("rect")
+      .attr("x", width / 2)
+      .attr("y", y)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+
+   svg.append("text")
+      .attr("x", width)
+      .attr("y", y + height)
+      .text("This is Bottom Aligned with font 20")
+      .attr("font-size", 20)
+      .attr("text-anchor", "middle");
+
+   y += height * 1.5;
+   svg.append("rect")
+      .attr("x", 0)
+      .attr("y", y)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+
+   svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", y + height / 2)
+      .attr("dy", "0.35em")
+      .text("This will not fit because very Long. Though the left started with font-size 20 and this started with font-size 50")
+      .attr("font-size", 40)
+      .attr("text-anchor", "middle");
+
+
+   svg.append("rect")
+      .attr("x", width * 1.5)
+      .attr("y", y)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+
+   svg.append("text")
+      .attr("x", width * 2)
+      .attr("y", y + height / 2)
+      .attr("dy", "0.35em")
+      .text("This will not fit because very Long. Though the left started with font-size 40 and this started with font-size 99")
+      .attr("font-size", 99)
+      .attr("text-anchor", "middle");
+   
+
+   y += height * 1.5;
+   svg.append("rect")
+      .attr("x", 400)
+      .attr("y", 0)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "lightblue");
+
+   svg.append("text")
+      .attr("x", 400 + width / 2)
+      .attr("y", 0 + height / 2)
+      .attr("dy", "0.35em")
+      .text("This\n ... \n is \n preformatted with linebreaks")
+      .attr("font-size", 15)
+      .attr("text-anchor", "middle");
+
+
+
+   svg.selectAll("text").each(function(d, i) {
+     d3Tools.wrapText(this, width, height, 20, "...");})
+   
+  </script>
+</body>

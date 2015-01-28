@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="../utility/d3/d3.v3.min.js"></script>
+<script src="../utility/underscore/underscore-min.js"></script>
+<style>
+  th {
+      font-weight: normal;
+      text-align: center;
+      padding-right: 10px;
+      /* min-width: 43px; */
+      cursor: s-resize;
+      font-size: 12px;
+      background-color:#A7C942;
+      width: 50px;
+      /* border: 1px solid #000 */
+      /* width: 50px; */
+  }
+  
+  tbody tr td:first-child{
+      text-align: left;
+      padding-top: 10px;
+      width: 75px;
+  }
+  
+  tbody td {
+      text-align: right;
+      padding: 10px;
+      /* border-left: solid 1px #000; */
+      width: 50px;
+      /* border: 1px solid #000 */
+      
+  }
+
+  tbody td:nth-child(2) {
+      background-color:gray;
+  }
+  
+  #table-in {
+      background-color: #771b61;
+      color:white;
+  }
+  #table-total {
+      background-color: #003156;
+      color:white;
+  }
+  
+  #table-row-total {
+      border-collapse: collapse;
+      border-spacing: 0;
+  }
+  #table-row-total td {
+      border-collapse: collapse;
+      border-spacing: 0;
+      border-top: solid 1px #000;
+      font-weight:bold;
+  }
+  
+</style>
+<body>
+  <div>  <h1>Table 1</h1>
+    <table id = "ProfitTable" style = "border-collapse: collapse">
+      <thead>
+      <!-- Header 1 -->
+      <tr> 
+	<th></th>
+	<th colspan = "3" id = "table-variance">Total</th>
+	<th colspan = "3">PMPM</th>
+	<th colspan = "2" id = "table-variance">Variance</th>
+      </tr>
+      <!-- Header 2 -->
+      <tr> 
+	<th></th>
+	<th id = "table-in">Target</th>
+	<th>Non-Target</th>
+	<th id = "table-total">Total</th>
+	<th id = "table-in">Target</th>
+	<th>Non-Target</th>
+	<th>Total</th>
+	<th id = "table-variance">Target vs Total</th>
+	<th id = "table-variance">Target vs Non-Target</th>
+      </tr>
+      </thead>
+      <tbody>
+	<tr> 
+	  <td>Total MA Payment</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	</tr>
+	<tr> 
+	  <td>Part D</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+      </tr>
+	<tr id = "table-row-total"> 
+	  <td>Total</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+      </tr></tbody>
+    </table>
+    <table id = "ProfitTable" style = "border-collapse: collapse">
+      <tbody><tr> 
+	  <td>Total MA Payment</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	</tr>
+	<tr> 
+	  <td>Part D</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+      </tr></tbody>
+    </table>
+  </div>
+  <div>  <h1>Table 2</h1> 
+    <table id = "ProfitTable" style = "border-collapse: collapse">
+      <thead>
+	<!-- Header 1 -->
+	<tr> 
+	  <th></th>
+	  <th colspan = "3" id = "table-variance">Total</th>
+	  <th colspan = "3">PMPM</th>
+	  <th colspan = "2" id = "table-variance">Variance</th>
+	</tr>
+	<!-- Header 2 -->
+	<tr> 
+	  <th></th>
+	  <th id = "table-in">Target</th>
+	  <th>Non-Target</th>
+	  <th id = "table-total">Total</th>
+	  <th id = "table-in">Target</th>
+	  <th>Non-Target</th>
+	  <th>Total</th>
+	  <th id = "table-variance">Target vs Total</th>
+	  <th id = "table-variance">Target vs Non-Target</th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr> 
+	  <td rowspan = "3">Total MA Payment</td>
+	  <td>Total MA Payment</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	</tr>
+	<tr> 
+	  <td>Part D</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	</tr>
+	<tr id = "table-row-total"> 
+	  <td>Part D</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+	  <td>123</td>
+      </tr></tbody>
+</div>
+  <script>
+    
+    
+    var data = [["Part D", "42", "42"],["Total", "42", "42"]];
+
+    var data = [["Part D", "42", "42"],["Total", "42", "42"]];
+
+    var trows = d3.select("#ProfitTable").selectAll("tbody").selectAll("tr")
+    
+    
+    // trows.data(data, function(d) {return d[0];})
+    // .selectAll("td")
+    // .data(function(i) {
+    // 	return i})
+    // .text(function(d) {return d})
+    
+  </script>
+</body>
+</html>
+    
+<!-- data["00054767401"] -->
+    
+    
+    
+    
+    

@@ -1,0 +1,60 @@
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Tue Jul 23 13:58:07 2013
+
+   Source : c:\Users\hilbertjp\Public_Files\hilbert\Common\
+     Dest = E:\common\
+
+    Files : *.*
+	    
+  Options : *.* /L /S /COPY:DAT /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   0	c:\Users\hilbertjp\Public_Files\hilbert\Common\
+	*EXTRA Dir        -1	E:\common\Apps\
+	*EXTRA Dir        -1	E:\common\Python\
+	                  16	c:\Users\hilbertjp\Public_Files\hilbert\Common\Data\
+	*EXTRA Dir        -1	E:\common\Data\Scripts\
+	  *EXTRA File 		    2608	Actuarial_Products (New).sql
+	    Older     		    5904	Actuarial_Products.sql
+	    New File  		    1794	HCC Rates.csv
+	    New File  		    1343	HCC Trumps.csv
+	                   9	c:\Users\hilbertjp\Public_Files\hilbert\Common\Data\CCS\
+	                   2	c:\Users\hilbertjp\Public_Files\hilbert\Common\Data\docs\
+	  *EXTRA File 		   33314	Specifications of Comorbidity Indices.pdf
+	                  15	c:\Users\hilbertjp\Public_Files\hilbert\Common\R\
+	*EXTRA Dir        -1	E:\common\R\Complex Multi-Plot\
+	  *EXTRA File 		    5893	Complex Multi-Plot.r
+	  *EXTRA File 		    5919	GGPlot Multi Graph Demo.r
+	    Older     		    1652	init.r
+	                   3	c:\Users\hilbertjp\Public_Files\hilbert\Common\R\Plotting\
+	                   5	c:\Users\hilbertjp\Public_Files\hilbert\Common\R\Plotting\Complex Multi-Plot\
+	                   6	c:\Users\hilbertjp\Public_Files\hilbert\Common\R\zip_code_plots\
+	  *EXTRA File 		   2.2 m	tl_rd13_us_zcta510.dbf
+	  *EXTRA File 		     165	tl_rd13_us_zcta510.prj
+	  *EXTRA File 		 797.4 m	tl_rd13_us_zcta510.shp
+	  *EXTRA File 		   18075	tl_rd13_us_zcta510.shp.xml
+	  *EXTRA File 		  265252	tl_rd13_us_zcta510.shx
+	                   7	c:\Users\hilbertjp\Public_Files\hilbert\Common\Shell\
+	  *EXTRA File 		     181	directory_tree.txt
+	  *EXTRA File 		     614	Outlook Autoarchive.reg
+	  *EXTRA File 		     144	Recursive Move (Collapse Dir Tree).txt
+	                  24	c:\Users\hilbertjp\Public_Files\hilbert\Common\SQL\
+	    Older     		    2367	SQL_Useful.sql
+	                   6	c:\Users\hilbertjp\Public_Files\hilbert\Common\System\
+	                   9	c:\Users\hilbertjp\Public_Files\hilbert\Common\System\Automation\
+	                   4	c:\Users\hilbertjp\Public_Files\hilbert\Common\System\Automation\Auto Logon\
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :        13         0        13         0         0         4
+   Files :       106         5       101         0         0        12
+   Bytes :   40.34 m    12.7 k   40.32 m         0         0  799.94 m
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+
+   Ended : Tue Jul 23 13:58:07 2013

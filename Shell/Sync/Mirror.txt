@@ -1,0 +1,285 @@
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Fri Jul 19 13:27:45 2013
+
+   Source : c:\Users\hilbertjp\Local_Files\Library\
+     Dest = e:\Library\
+
+    Files : *.*
+	    
+  Options : *.* /S /E /COPY:DAT /DCOPY:T /PURGE /MIR /XO /R:2 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   0	c:\Users\hilbertjp\Local_Files\Library\
+	                   0	c:\Users\hilbertjp\Local_Files\Library\Articles\
+	                  14	c:\Users\hilbertjp\Local_Files\Library\Articles\Buisness\
+	                  16	c:\Users\hilbertjp\Local_Files\Library\Articles\Economics\
+	                   2	c:\Users\hilbertjp\Local_Files\Library\Articles\Finance\
+	                  56	c:\Users\hilbertjp\Local_Files\Library\Articles\Health\
+	                   0	c:\Users\hilbertjp\Local_Files\Library\Articles\Health\Financing\
+	                   2	c:\Users\hilbertjp\Local_Files\Library\Articles\Health\Financing\IBNR\
+	                  11	c:\Users\hilbertjp\Local_Files\Library\Articles\Health\Health Informatics\
+	                   0	c:\Users\hilbertjp\Local_Files\Library\Articles\Health\Medical\
+	                   5	c:\Users\hilbertjp\Local_Files\Library\Articles\Health\Medical\Comorbidity\
+	                  14	c:\Users\hilbertjp\Local_Files\Library\Articles\Health\Reform\
+	                   2	c:\Users\hilbertjp\Local_Files\Library\Articles\Health\Technology\
+	                   8	c:\Users\hilbertjp\Local_Files\Library\Articles\Statistics\
+	                   6	c:\Users\hilbertjp\Local_Files\Library\Articles\Statistics\Baysian\
+	                  16	c:\Users\hilbertjp\Local_Files\Library\Articles\Statistics\Clustering\
+	                   6	c:\Users\hilbertjp\Local_Files\Library\Articles\Statistics\Time Series\
+	                   2	c:\Users\hilbertjp\Local_Files\Library\Books\
+	                   0	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\
+	*EXTRA Dir        -1	e:\Library\Books\Computing\Cheat Sheets\
+	  *EXTRA File 		   51244	Core C-sharp Quick Reference.pdf
+	  *EXTRA File 		   94814	CSS 2.0 Quick Reference.pdf
+	  *EXTRA File 		  312636	Distributions.png
+	  *EXTRA File 		   20393	Eclipse - Key Binding.csv
+	  *EXTRA File 		   39546	Eclipse - Key Binding.xlsx
+	  *EXTRA File 		  162561	Emacs - AUCTEX.pdf
+	  *EXTRA File 		   92274	Emacs - ESS.pdf
+	  *EXTRA File 		   11930	Emacs Key Binding.xlsx
+	  *EXTRA File 		   81932	Emacs.pdf
+	  *EXTRA File 		  343563	GIT.png
+	  *EXTRA File 		   45887	Greek Alphabet.docx
+	  *EXTRA File 		  164972	LaTeX.pdf
+	  *EXTRA File 		   29911	Oracle Cheat Sheet.docx
+	  *EXTRA File 		   20738	R - Eclipse Key Binding (short).docx
+	  *EXTRA File 		   20724	R - Eclipse Key Binding.docx
+	  *EXTRA File 		  457233	R + Eclipse Install (1.1).docx
+	  *EXTRA File 		   19724	R + Veritable.docx
+	  *EXTRA File 		   73028	R.pdf
+	  *EXTRA File 		  608097	Regular Expressions.pdf
+	  *EXTRA File 		  147368	SQL Joins.jpg
+	  *EXTRA File 		   1.9 m	SQL.pdf
+	  *EXTRA File 		   13058	Windows Keyboard Shortcuts.xlsx
+	  *EXTRA File 		   13309	Windows.pdf
+	*EXTRA Dir        -1	e:\Library\Books\Computing\Statistica\
+	  *EXTRA File 		  393608	Basic Statistical Data Description.pdf
+	  *EXTRA File 		  190703	Cancer Gene - Bioinformatics.pdf
+	  *EXTRA File 		  328038	Clustering Techniques for Data Mining Modeling.pdf
+	  *EXTRA File 		  267187	Credit Risk Using Discriminant Analysis in a Data Mining Model.pdf
+	  *EXTRA File 		 1044358	Dahlia Virus - Bioinformatics.pdf
+	  *EXTRA File 		  326242	Data Preparation and Management .pdf
+	  *EXTRA File 		  354992	Deployment of a Data Mining Model .pdf
+	  *EXTRA File 		   1.8 m	Diabetes Treatment.pdf
+	  *EXTRA File 		  243823	Heart Disease.pdf
+	  *EXTRA File 		  323439	IndependentComponent Analysis.pdf
+	  *EXTRA File 		  352665	Jackknife-Bootstrap.pdf
+	  *EXTRA File 		  318813	Linear and Logistic Regression.pdf
+	  *EXTRA File 		   2.3 m	Medical Tutorial Using STATISTICA Data Miner Recipe.pdf
+	  *EXTRA File 		  811356	Predicting box-office success of motion pictures with neural networks.pdf
+	  *EXTRA File 		   1.3 m	R Integration into Statistica.pdf
+	  *EXTRA File 		  181330	Random Forests.pdf
+	  *EXTRA File 		  434305	Regression Trees Using Boston Housing Data Set.pdf
+	  *EXTRA File 		  694799	Response Optimization.pdf
+	  *EXTRA File 		   1.6 m	R-Integration.pdf
+	  *EXTRA File 		  161736	Root Cause Analysis.pdf
+	  *EXTRA File 		   3.6 m	SocialNetworking_Baboons.pdf
+	  *EXTRA File 		   1.7 m	SocialNetworks_Humans.pdf
+	  *EXTRA File 		  255852	Text Mining - NTSB Aircraft Accident Reports.pdf
+	  *EXTRA File 		  187509	Visual Data Mining - Titanic Survivors.pdf
+	  *EXTRA File 		   2.0 m	GRETL - Guide.pdf
+	  *EXTRA File 		   8.2 m	Information Dashboard Design (Stephen Few, 2006).pdf
+	  *EXTRA File 		  320975	JAGS Version 3.2.0 user manual.pdf
+	  *EXTRA File 		 1026322	Regular Expression Pocket Reference Second Edition.pdf
+	  *EXTRA File 		 1026322	Regular Expressions Cookbook.pdf
+	  *EXTRA File 		  16.1 m	Windows Powershell Cookbook 3rd Edition.pdf
+	  *EXTRA File 		   3.5 m	Windows Powershell Pocket Reference 2nd Edition.pdf
+	  *EXTRA File 		   1.4 m	X-12 ARIMA - Reference Manual.pdf
+	                   2	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\EMACS\
+	  New Dir          5	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\Misc\
+	    New File  		   8.2 m	Information Dashboard Design (Stephen Few, 2006).pdf  0.0% 12.1% 24.2% 36.3% 48.4% 60.5% 72.7% 84.8% 96.9%100%  
+	    New File  		  320975	JAGS Version 3.2.0 user manual.pdf  0%   40%   81%  100%  
+	    New File  		 1026322	Regular Expression Pocket Reference Second Edition.pdf  0%   25%   51%   76%  100%  
+	    New File  		  16.1 m	Windows Powershell Cookbook 3rd Edition.pdf  0.0%  6.1% 12.3% 18.5% 24.7% 30.8% 37.0% 43.2% 49.4% 55.5% 61.7% 67.9% 74.1% 80.2% 86.4% 92.6% 98.8%100%  
+	    New File  		   3.5 m	Windows Powershell Pocket Reference 2nd Edition.pdf  0%   14%   28%   42%   56%   70%   84%   98%  100%  
+	                   4	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\Python\
+	                  14	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\Python\Reference\
+	                  14	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\Python\Reference\How To\
+	                  13	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\R\
+	  *EXTRA File 		   3.1 m	Guide To Eclipse And The R Plug-in Statet - Longhow Lam.pdf
+	  *EXTRA File 		  111271	Introduction to the C Interface to R.pdf
+	  *EXTRA File 		   15360	Thumbs.db
+	                   4	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\R\Graphics\
+	                  11	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\R\Packages\
+	                   3	c:\Users\hilbertjp\Local_Files\Library\Books\Computing\SQL\
+	                   5	c:\Users\hilbertjp\Local_Files\Library\Books\Economics\
+	  *EXTRA File 		  540958	A Course in Game Theory (MIT Press) (Solution Manual).pdf
+	  *EXTRA File 		   1.6 m	Applied Health Economics (Taylor and Francis Group).pdf
+	  *EXTRA File 		  39.3 m	Microeconomic Theory (Oxford) (Solution Manual).pdf
+	                   3	c:\Users\hilbertjp\Local_Files\Library\Books\Hardware\
+	                  20	c:\Users\hilbertjp\Local_Files\Library\Books\Health\
+	                   1	c:\Users\hilbertjp\Local_Files\Library\Books\Mathematics\
+	                  17	c:\Users\hilbertjp\Local_Files\Library\Books\Statistics\
+	  *EXTRA File 		   6.8 m	Mining the Social Web.pdf
+	  *EXTRA File 		  17.2 m	Networks, Crowds, and Markets (Easley, Kleinberg).pdf
+	    New File  		   2.0 m	GRETL - Guide.pdf  0%   23%   47%   71%   95%  100%  
+	    New File  		   6.8 m	Mining the Social Web - Matthew Russell.pdf  0.0%  7.3% 14.6% 22.0% 29.3% 36.6% 44.0% 51.3% 58.7% 66.0% 73.3% 80.7% 88.0% 95.3%100%  
+	  New Dir         23	c:\Users\hilbertjp\Local_Files\Library\Cheat Sheets\
+	    New File  		   51244	Core C-sharp Quick Reference.pdf  0%  100%  
+	    New File  		   94814	CSS 2.0 Quick Reference.pdf  0%  100%  
+	    New File  		  312636	Distributions.png  0%   41%   83%  100%  
+	    New File  		   20393	Eclipse - Key Binding.csv  0%  100%  
+	    New File  		   39546	Eclipse - Key Binding.xlsx  0%  100%  
+	    New File  		  162561	Emacs - AUCTEX.pdf  0%   80%  100%  
+	    New File  		   92274	Emacs - ESS.pdf  0%  100%  
+	    New File  		   11930	Emacs Key Binding.xlsx  0%  100%  
+	    New File  		   81932	Emacs.pdf  0%  100%  
+	    New File  		  343563	GIT.png  0%   38%   76%  100%  
+	    New File  		   45887	Greek Alphabet.docx  0%  100%  
+	    New File  		  164972	LaTeX.pdf  0%   79%  100%  
+	    New File  		   29911	Oracle Cheat Sheet.docx  0%  100%  
+	    New File  		   20738	R - Eclipse Key Binding (short).docx  0%  100%  
+	    New File  		   20724	R - Eclipse Key Binding.docx  0%  100%  
+	    New File  		  457233	R + Eclipse Install (1.1).docx  0%   28%   57%   85%  100%  
+	    New File  		   19724	R + Veritable.docx  0%  100%  
+	    New File  		   73028	R.pdf  0%  100%  
+	    New File  		  608097	Regular Expressions.pdf  0%   43%   86%  100%  
+	    New File  		  147368	SQL Joins.jpg  0%   88%  100%  
+	    New File  		   1.9 m	SQL.pdf  0%   13%   26%   39%   52%   65%   78%   91%  100%  
+	    New File  		   13058	Windows Keyboard Shortcuts.xlsx  0%  100%  
+	    New File  		   13309	Windows.pdf  0%  100%  
+	                   3	c:\Users\hilbertjp\Local_Files\Library\Lectures\
+	                   0	c:\Users\hilbertjp\Local_Files\Library\Lectures\Computing for Data Analysis\
+	                  27	c:\Users\hilbertjp\Local_Files\Library\Lectures\Computing for Data Analysis\Slides\
+	                  39	c:\Users\hilbertjp\Local_Files\Library\Lectures\Computing for Data Analysis\Videos\
+	                   0	c:\Users\hilbertjp\Local_Files\Library\Lectures\Health Policy and the Affordable Care Act\
+	                   8	c:\Users\hilbertjp\Local_Files\Library\Lectures\Health Policy and the Affordable Care Act\Slides\
+	                  18	c:\Users\hilbertjp\Local_Files\Library\Lectures\Health Policy and the Affordable Care Act\Videos\
+	  *EXTRA File 		   29696	Thumbs.db
+	                   0	c:\Users\hilbertjp\Local_Files\Library\Lectures\Probabilistic Graphical Models\
+	                  25	c:\Users\hilbertjp\Local_Files\Library\Lectures\Probabilistic Graphical Models\Slides\
+	  *EXTRA File 		   11264	Thumbs.db
+	                  94	c:\Users\hilbertjp\Local_Files\Library\Lectures\Probabilistic Graphical Models\Videos\
+	  *EXTRA File 		   21504	Thumbs.db
+	                   0	c:\Users\hilbertjp\Local_Files\Library\Lectures\Social Network Analysis\
+	                  32	c:\Users\hilbertjp\Local_Files\Library\Lectures\Social Network Analysis\Slides\
+	                  32	c:\Users\hilbertjp\Local_Files\Library\Lectures\Social Network Analysis\Videos\
+	  New Dir          3	c:\Users\hilbertjp\Local_Files\Library\Trash\
+	    New File  		  540958	A Course in Game Theory (MIT Press) (Solution Manual).pdf  0%   48%   96%  100%  
+	    New File  		   3.1 m	Guide To Eclipse And The R Plug-in Statet - Longhow Lam.pdf  0%   16%   32%   48%   64%   80%   96%  100%  
+	    New File  		  39.3 m	Microeconomic Theory (Oxford) (Solution Manual).pdf  0.0%  2.5%  5.0%  7.6% 10.1% 12.6% 15.2% 17.7% 20.3% 22.8% 25.3% 27.9% 30.4% 33.0% 35.5% 38.0% 40.6% 43.1% 45.7% 48.2% 50.7% 53.3% 55.8% 58.3% 60.9% 63.4% 66.0% 68.5% 71.0% 73.6% 76.1% 78.7% 81.2% 83.7% 86.3% 88.8% 91.4% 93.9% 96.4% 99.0%100%  
+	  New Dir         24	c:\Users\hilbertjp\Local_Files\Library\Trash\Statistica\
+	    New File  		  393608	Basic Statistical Data Description.pdf  0%   33%   66%   99%  100%  
+	    New File  		  190703	Cancer Gene - Bioinformatics.pdf  0%   68%  100%  
+	    New File  		  328038	Clustering Techniques for Data Mining Modeling.pdf  0%   39%   79%  100%  
+	    New File  		  267187	Credit Risk Using Discriminant Analysis in a Data Mining Model.pdf  0%   49%   98%  100%  
+	    New File  		 1044358	Dahlia Virus - Bioinformatics.pdf  0%   25%   50%   75%  100%  
+	    New File  		  326242	Data Preparation and Management .pdf  0%   40%   80%  100%  
+	    New File  		  354992	Deployment of a Data Mining Model .pdf  0%   36%   73%  100%  
+	    New File  		   1.8 m	Diabetes Treatment.pdf  0%   13%   27%   40%   54%   67%   81%   94%  100%  
+	    New File  		  243823	Heart Disease.pdf  0%   53%  100%  
+	    New File  		  323439	IndependentComponent Analysis.pdf  0%   40%   81%  100%  
+	    New File  		  352665	Jackknife-Bootstrap.pdf  0%   37%   74%  100%  
+	    New File  		  318813	Linear and Logistic Regression.pdf  0%   41%   82%  100%  
+	    New File  		   2.3 m	Medical Tutorial Using STATISTICA Data Miner Recipe.pdf  0%   21%   43%   65%   86%  100%  
+	    New File  		  811356	Predicting box-office success of motion pictures with neural networks.pdf  0%   32%   64%   96%  100%  
+	    New File  		   1.3 m	R Integration into Statistica.pdf  0%   19%   38%   57%   76%   95%  100%  
+	    New File  		  181330	Random Forests.pdf  0%   72%  100%  
+	    New File  		  434305	Regression Trees Using Boston Housing Data Set.pdf  0%   30%   60%   90%  100%  
+	    New File  		  694799	Response Optimization.pdf  0%   37%   75%  100%  
+	    New File  		   1.6 m	R-Integration.pdf  0%   15%   31%   46%   62%   77%   93%  100%  
+	    New File  		  161736	Root Cause Analysis.pdf  0%   81%  100%  
+	    New File  		   3.6 m	SocialNetworking_Baboons.pdf  0%   13%   27%   41%   54%   68%   82%   95%  100%  
+	    New File  		   1.7 m	SocialNetworks_Humans.pdf  0%   14%   29%   44%   58%   73%   88%  100%  
+	    New File  		  255852	Text Mining - NTSB Aircraft Accident Reports.pdf  0%   51%  100%  
+	    New File  		  187509	Visual Data Mining - Titanic Survivors.pdf  0%   69%  100%  
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :        49         4        45         0         0         2
+   Files :       604        57       547         0         0        66
+   Bytes :   4.336 g  104.77 m   4.234 g         0         0  126.29 m
+   Times :   0:00:06   0:00:05                       0:00:00   0:00:00
+
+
+   Speed :            18971578 Bytes/sec.
+   Speed :            1085.562 MegaBytes/min.
+
+   Ended : Fri Jul 19 13:27:51 2013
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Fri Jul 19 13:27:51 2013
+
+   Source = e:\Library\
+     Dest : c:\Users\hilbertjp\Local_Files\Library\
+
+    Files : *.*
+	    
+  Options : *.* /S /E /COPY:DAT /DCOPY:T /PURGE /MIR /XO /R:2 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   0	e:\Library\
+	                   0	e:\Library\Articles\
+	                  14	e:\Library\Articles\Buisness\
+	                  16	e:\Library\Articles\Economics\
+	                   2	e:\Library\Articles\Finance\
+	                  56	e:\Library\Articles\Health\
+	                   0	e:\Library\Articles\Health\Financing\
+	                   2	e:\Library\Articles\Health\Financing\IBNR\
+	                  11	e:\Library\Articles\Health\Health Informatics\
+	                   0	e:\Library\Articles\Health\Medical\
+	                   5	e:\Library\Articles\Health\Medical\Comorbidity\
+	                  14	e:\Library\Articles\Health\Reform\
+	                   2	e:\Library\Articles\Health\Technology\
+	                   8	e:\Library\Articles\Statistics\
+	                   6	e:\Library\Articles\Statistics\Baysian\
+	                  16	e:\Library\Articles\Statistics\Clustering\
+	                   6	e:\Library\Articles\Statistics\Time Series\
+	                   2	e:\Library\Books\
+	                   0	e:\Library\Books\Computing\
+	                   2	e:\Library\Books\Computing\EMACS\
+	                   5	e:\Library\Books\Computing\Misc\
+	                   4	e:\Library\Books\Computing\Python\
+	                  14	e:\Library\Books\Computing\Python\Reference\
+	                  14	e:\Library\Books\Computing\Python\Reference\How To\
+	                  13	e:\Library\Books\Computing\R\
+	                   4	e:\Library\Books\Computing\R\Graphics\
+	                  11	e:\Library\Books\Computing\R\Packages\
+	                   3	e:\Library\Books\Computing\SQL\
+	                   5	e:\Library\Books\Economics\
+	                   3	e:\Library\Books\Hardware\
+	                  20	e:\Library\Books\Health\
+	                   1	e:\Library\Books\Mathematics\
+	                  17	e:\Library\Books\Statistics\
+	    Newer     		  12.4 m	Elements Of Statistical Learning (Springer).pdf  0.0%  8.0% 16.0% 24.1% 32.1% 40.2% 48.2% 56.3% 64.3% 72.3% 80.4% 88.4% 96.5%100%  
+	    Newer     		   3.7 m	Graphical Models with R.pdf  0%   13%   26%   40%   53%   67%   80%   94%  100%  
+	                  23	e:\Library\Cheat Sheets\
+	                   3	e:\Library\Lectures\
+	                   0	e:\Library\Lectures\Computing for Data Analysis\
+	                  27	e:\Library\Lectures\Computing for Data Analysis\Slides\
+	                  39	e:\Library\Lectures\Computing for Data Analysis\Videos\
+	                   0	e:\Library\Lectures\Health Policy and the Affordable Care Act\
+	                   8	e:\Library\Lectures\Health Policy and the Affordable Care Act\Slides\
+	                  18	e:\Library\Lectures\Health Policy and the Affordable Care Act\Videos\
+	                   0	e:\Library\Lectures\Probabilistic Graphical Models\
+	                  25	e:\Library\Lectures\Probabilistic Graphical Models\Slides\
+	                  94	e:\Library\Lectures\Probabilistic Graphical Models\Videos\
+	                   0	e:\Library\Lectures\Social Network Analysis\
+	                  32	e:\Library\Lectures\Social Network Analysis\Slides\
+	                  32	e:\Library\Lectures\Social Network Analysis\Videos\
+	                   3	e:\Library\Trash\
+	                  24	e:\Library\Trash\Statistica\
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :        49         0        49         0         0         0
+   Files :       604         2       602         0         0         0
+   Bytes :   4.336 g   16.15 m   4.321 g         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+
+
+   Speed :            32634674 Bytes/sec.
+   Speed :            1867.371 MegaBytes/min.
+
+   Ended : Fri Jul 19 13:27:52 2013
