@@ -94,8 +94,7 @@ sqlComment <- function(table.names, comment = " ",
 }
 
 sqlDrop.Quick <- function(table.name, schema = NULL,
-                          db = "EDW", uid = "HILBERTJP",
-                          pwd = "J120741h!") {
+                          db = "EDW", uid, pwd) {
     ## ########################################################################
     ## SQLDROP.QUICK(TABLE.NAME, DB = "EDW")
     ## Similar to sqlDrop, however automatically opens and closes the
@@ -138,33 +137,34 @@ sqlSave.Quick <- function(data, table.name,
         table.name <- paste(schema, table.name, sep = ".")
     table.name <- toupper(table.name)
     oracle <- odbcConnect(db, uid, pwd)
-    # sqlDrop(oracle, table.name)
+    ## sqlDrop(oracle, table.name)
+
+    ## Correct String Length
+    dbms.name <- odbcGetInfo(oracle)["DBMS_Name"]
     names(data) <- gsub("[/.]", "_", toupper(names(data)))
     if(!is.null(varTypes))
         names(varTypes) <- gsub("[/.]", "_", toupper(names(varTypes)))
-    
+
     add.varTypes <- names(data)[!(names(data) %in% names(varTypes))]
     varTypes <- c(varTypes,
-                  sqlCharacterLength(data, add.varTypes))
-    
-    if(is.null(varTypes))
-        sqlSave(oracle, data, tablename = table.name,
-                rownames = FALSE, safer = FALSE, ...)
-    else 
-        sqlSave(oracle, data, tablename = table.name,
-                rownames = FALSE, safer = FALSE, varTypes = varTypes, ...)
+                  sqlCharacterLength(dbms.name, data, add.varTypes))
+
+    sqlSave(oracle, data, tablename = table.name,
+            rownames = FALSE, safer = FALSE, varTypes = varTypes, ...)
     
     close(oracle)
 }
 
-sqlCharacterLength <- function(data, var = names(data)) {
+sqlCharacterLength <- function(dbName, data, var = names(data)) {
     if(length(var) == 0) return(NULL)
     data <- data[, var]
+
+    charType <- strsplit(getSqlTypeInfo(dbName)$character, '\\(')[[1]][1]
 
     ## Special case if there is only one variable
     if(length(var) == 1) {
         if(is.factor(data) | is.character(data)) {
-            out <- paste("VARCHAR2(",
+            out <- paste(charType, "(",
                          max(nchar(as.character(data))), ")", 
                          sep = "")
             names(out) <- var
@@ -184,14 +184,14 @@ sqlCharacterLength <- function(data, var = names(data)) {
 
     ## Loop
     if(length(n) == 1) {
-        out <- paste("VARCHAR2(",
+        out <- paste(charType, "(",
                      max(nchar(data[, names(n)])), ")", 
                      sep = "")
         names(out) <- names(n)
     }
     else {
         out <- sapply(data[, names(n)],
-               function(x) paste("VARCHAR2(",
+               function(x) paste(charType, "(",
                                  max(nchar(x)), ")", 
                                  sep = ""))
     }
@@ -200,5 +200,8 @@ sqlCharacterLength <- function(data, var = names(data)) {
 
 
 
-
-    
+tryCatch(setSqlTypeInfo("Oracle",
+                        list(double="NUMBER", integer="NUMBER",
+                             character="VARCHAR2(255)",
+                             logical="VARCHAR2(5)")),
+         error = function(x){print("updated ORACLE types")})
