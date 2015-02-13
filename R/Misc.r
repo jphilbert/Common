@@ -388,6 +388,8 @@ Word.Wrap <- function(x,len) {
            paste(strwrap(x, width=len), collapse="\n"), USE.NAMES = FALSE)
 }
 
+
+
 iif <- function (...) {
     ## ##########################################################
     ## Multi - If Else Function
@@ -438,4 +440,35 @@ Must be at an odd number and at least 3")
         no <- ans
     }
     ans
+}
+
+if.na <- function(x, value) {
+    x[is.na(x)] <- value
+    return(x)
+}
+
+expand.data.frame <- function(..., KEEP.OUT.ATTRS = TRUE,
+                              stringsAsFactors = TRUE) {
+    nargs <- length(args <- list(...))
+    if (!nargs || nargs == 0) 
+        return(as.data.frame(list()))
+
+    grid.list <- list()
+
+    for(i in seq(length(args))) {
+        if(class(args[[i]]) == "data.frame") {
+            for(j in seq(length(args[[i]]))) {
+                grid.list[[names(args[[i]])[j]]] <- unique(args[[i]][, j])
+            }
+        }
+        else if(class(args[[i]]) == "list") { 
+            for(j in seq(length(args[[i]]))) {
+                grid.list[[names(args[[i]])[j]]] <- args[[i]][[j]]
+            }
+        }
+        else
+            grid.list[[names(args)[i]]] <- args[[i]]
+    }
+    return(expand.grid(grid.list, KEEP.OUT.ATTRS = KEEP.OUT.ATTRS,
+                       stringsAsFactors = stringsAsFactors))
 }
