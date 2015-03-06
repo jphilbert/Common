@@ -203,8 +203,69 @@ eval.p <- function(a.string.to.evaluate) {
 ## ##########################################################################
 ## Misc Data Functions
 ## ##########################################################################
-## Adds strings together
-"%+%" <- function(a,b) paste(a,b,sep="")
+
+iif <- function (...) {
+    ## ##########################################################
+    ## Multi - If Else Function
+    ##
+    ## Repeatedly applies if-else to multiple tests
+    ## iifelse(t1, y1, ...) =
+    ##    ifelse(t1, y1, ifelse(t2, y2, ifelse(...)))
+    ## 
+    ## ##########################################################
+    args <- list(...)
+    nArgs <- length(args)
+    if(nArgs %% 2 != 1 | nArgs < 3) {
+        warning("\nInvalid number of Arguments
+Must be at an odd number and at least 3")
+        return(NULL)
+    }
+    
+    no <- args[[nArgs]]
+    for(i in seq(nArgs-2, 1, by = -2)) {
+        test <- args[[i]]
+        yes <- args[[i+1]]
+        if (is.atomic(test)) {
+            if (typeof(test) != "logical") 
+                storage.mode(test) <- "logical"
+            if (length(test) == 1 && is.null(attributes(test))) {
+                if (is.na(test)) 
+                    return(NA)
+                else if (test) {
+                    if (length(yes) == 1 && is.null(attributes(yes))) 
+                        return(yes)
+                }
+                     else if (length(no) == 1 && is.null(attributes(no))) 
+                              return(no)
+            }
+        }
+        else test <- if (isS4(test)) 
+                         as(test, "logical")
+                     else as.logical(test)
+        ans <- test
+        ok <- !(nas <- is.na(test))
+        if (any(test[ok])) 
+            ans[test & ok] <-
+                rep(yes, length.out = length(ans))[test & ok]
+        if (any(!test[ok])) 
+            ans[!test & ok] <-
+                rep(no, length.out = length(ans))[!test & ok]
+        ans[nas] <- NA
+        no <- ans
+    }
+    ans
+}
+
+if.na <- function(x, value) {
+    x[is.na(x)] <- value
+    return(x)
+}
+
+if.null <- function(x, value = NA) {
+    x[is.null(x)] <- value
+    return(x)
+}
+
 
 between <- function(x, range, exclusive = FALSE) {
   ## ########################################################################
@@ -236,37 +297,7 @@ between <- function(x, range, exclusive = FALSE) {
   return(NULL)
 }
 
-toProper <- function(string, old.sep = " ", new.sep = " ") {
-  ## ########################################################################
-  ## TOPROPER(STRING, OLD.SEP = " ", NEW.SEP = " ")
-  ## Capitalizes first letter of each word in a string.  Optional NEW.SEP and
-  ##  OLD.SEP allow overriding and replacement of the word separator.
-  ##
-  ## PARAMETERS:
-  ##   - string - string to parse
-  ##   - old.sep = " " - old word separator (replace from) 
-  ##   - new.sep = " " - new word separator (replace to)
-  ##
-  ## OUTPUT:
-  ##   - string
-  ##
-  ## EXAMPLE:
-  ##   toProper("jack.and.jill", ".", "-")
-  ##   [1] "Jack-And-Jill"
-  ## ########################################################################
-  
-  ## Unwrap list or vector of strings
-  sapply(tolower(string), function(x){
-    ## Split string into words (by old seperator)
-    v <- unlist(strsplit(x, split = old.sep, fixed = TRUE))
-    u <- sapply(v, function(x){
-      substring(x, 1, 1) <- toupper(substring(x, 1, 1))
-      return(x)
-    }, USE.NAMES = FALSE)
-    ## paste the string back together (by new seperator)
-    return(paste(u, collapse = new.sep))
-  }, USE.NAMES = FALSE)
-}
+
 
 drop.names <- function(data, ...) {
     ## ########################################################################
@@ -383,70 +414,57 @@ Subset.Split <- function(data, logic) {
 }
 
 
+
+###############################################################################
+## Text Functions
+###############################################################################
+## Adds strings together
+"%+%" <- function(a,b) paste(a,b,sep="")
+
+toProper <- function(string, old.sep = " ", new.sep = " ") {
+  ## ########################################################################
+  ## TOPROPER(STRING, OLD.SEP = " ", NEW.SEP = " ")
+  ## Capitalizes first letter of each word in a string.  Optional NEW.SEP and
+  ##  OLD.SEP allow overriding and replacement of the word separator.
+  ##
+  ## PARAMETERS:
+  ##   - string - string to parse
+  ##   - old.sep = " " - old word separator (replace from) 
+  ##   - new.sep = " " - new word separator (replace to)
+  ##
+  ## OUTPUT:
+  ##   - string
+  ##
+  ## EXAMPLE:
+  ##   toProper("jack.and.jill", ".", "-")
+  ##   [1] "Jack-And-Jill"
+  ## ########################################################################
+  
+  ## Unwrap list or vector of strings
+  sapply(tolower(string), function(x){
+    ## Split string into words (by old seperator)
+    v <- unlist(strsplit(x, split = old.sep, fixed = TRUE))
+    u <- sapply(v, function(x){
+      substring(x, 1, 1) <- toupper(substring(x, 1, 1))
+      return(x)
+    }, USE.NAMES = FALSE)
+    ## paste the string back together (by new seperator)
+    return(paste(u, collapse = new.sep))
+  }, USE.NAMES = FALSE)
+}
+
 Word.Wrap <- function(x,len) {
     sapply(x, function(x) 
            paste(strwrap(x, width=len), collapse="\n"), USE.NAMES = FALSE)
 }
 
+trim.whitespaces <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
-iif <- function (...) {
-    ## ##########################################################
-    ## Multi - If Else Function
-    ##
-    ## Repeatedly applies if-else to multiple tests
-    ## iifelse(t1, y1, ...) =
-    ##    ifelse(t1, y1, ifelse(t2, y2, ifelse(...)))
-    ## 
-    ## ##########################################################
-    args <- list(...)
-    nArgs <- length(args)
-    if(nArgs %% 2 != 1 | nArgs < 3) {
-        warning("\nInvalid number of Arguments
-Must be at an odd number and at least 3")
-        return(NULL)
-    }
-    
-    no <- args[[nArgs]]
-    for(i in seq(nArgs-2, 1, by = -2)) {
-        test <- args[[i]]
-        yes <- args[[i+1]]
-        if (is.atomic(test)) {
-            if (typeof(test) != "logical") 
-                storage.mode(test) <- "logical"
-            if (length(test) == 1 && is.null(attributes(test))) {
-                if (is.na(test)) 
-                    return(NA)
-                else if (test) {
-                    if (length(yes) == 1 && is.null(attributes(yes))) 
-                        return(yes)
-                }
-                     else if (length(no) == 1 && is.null(attributes(no))) 
-                              return(no)
-            }
-        }
-        else test <- if (isS4(test)) 
-                         as(test, "logical")
-                     else as.logical(test)
-        ans <- test
-        ok <- !(nas <- is.na(test))
-        if (any(test[ok])) 
-            ans[test & ok] <-
-                rep(yes, length.out = length(ans))[test & ok]
-        if (any(!test[ok])) 
-            ans[!test & ok] <-
-                rep(no, length.out = length(ans))[!test & ok]
-        ans[nas] <- NA
-        no <- ans
-    }
-    ans
-}
 
-if.na <- function(x, value) {
-    x[is.na(x)] <- value
-    return(x)
-}
-
+###############################################################################
+## Data Frame Functions
+###############################################################################
 expand.data.frame <- function(..., KEEP.OUT.ATTRS = TRUE,
                               stringsAsFactors = TRUE) {
     nargs <- length(args <- list(...))
@@ -471,4 +489,10 @@ expand.data.frame <- function(..., KEEP.OUT.ATTRS = TRUE,
     }
     return(expand.grid(grid.list, KEEP.OUT.ATTRS = KEEP.OUT.ATTRS,
                        stringsAsFactors = stringsAsFactors))
+}
+
+union.data.frame <- function(x, y) {
+    x[, setdiff(names(y), names(x))] <- NA
+    y[, setdiff(names(x), names(y))] <- NA
+    return(rbind(x, y[, names(x)]))
 }

@@ -4,10 +4,11 @@
 OPTIONS (SKIP=1, DIRECT=TRUE)
 
 load data
-	-- List of Files
+	-- List of Files (spaces are allowable)
 	infile 'FILE_RELATIVE_TO_HERE'
 	-- APPEND -- if desired
 	 into table TABLE_XXX
-	 fields terminated by "," optionally enclosed by '"'		  
+	 fields terminated by "," optionally enclosed by '"'
+ 	-- List of DESTINATION columns 
 	 (COLUMN_XXX,
 	 COLUMN_YYY)
