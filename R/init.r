@@ -16,21 +16,22 @@ options(repos =c(CASE = "http://cran.case.edu/",
 options(prompt = .Prompt)
 
 ## Load common packages here
-require(RODBC, warn.conflicts = FALSE)
+## require(RODBC, warn.conflicts = FALSE)
+require(RPostgreSQL, warn.conflicts = FALSE)
 require(plyr, warn.conflicts = FALSE)
 require(reshape2, warn.conflicts = FALSE)
 require(ggplot2, warn.conflicts = FALSE)
 require(dplyr, warn.conflicts = FALSE)
 
 ## Common directories
-dir.common <- "X:/Data Analysis/Data Analysis(DeptUsers)/Science_Team/hilbert/common/r"
-dir.science <- "X:/Data Analysis/Data Analysis(DeptUsers)/Science_Team"
-common.dir <- dir.common                # Legacy
+dir.common <- "~/common/r"
+
 
 ## List the directories
 cat("directory variables are:\n",
-    "\t dir.common = ", dir.common, '\n',
-     "\t dir.science = ", dir.science, '\n')
+    "\t dir.common = ", dir.common, '\n'
+    ## "\t dir.science = ", dir.science, '\n'
+    )
 
 ## List the files in the user directory
 print(data.frame(files = list.files(dir.common)))
