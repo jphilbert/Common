@@ -6,97 +6,11 @@ require(RJSONIO)
 ###############################################################################
 ## https://developers.google.com/maps/documentation/geocoding/
 
-## OUTDATED
-## geocode.parse.google <- function(results) {
-##     ## Flatten Result (single)
-##     flatten.result <- function(r) {
-##         ## Parse the Geometry
-##         gcdf <- with(r$geometry, {
-##             data.frame(lon = if.null(location$lng),
-##                        lat = if.null(location$lat), 
-##                        loctype = if.null(location_type), 
-##                        vp.NE.lat = if.null(viewport$northeast$lat), 
-##                        vp.SW.lat = if.null(viewport$southwest$lat), 
-##                        vp.NE.lon = if.null(viewport$northeast$lng), 
-##                        vp.SW.lon = if.null(viewport$southwest$lng))
-##         })
-
-##         ## Additional Info
-##         gcdf$type <- if.null(r$types[1])
-##         gcdf$partial <- if.null(r$partial_match, FALSE)
-##         gcdf$address <- if.null(r$formatted_address)
-
-##         ## Parse the Address
-##         addr <- t(ldply(r$address_components, function(l) {
-##             as.data.frame(l, stringsAsFactors = FALSE)[1, ]
-##         }))
-##         addr <- as.data.frame(addr, stringsAsFactors = FALSE)
-##         names(addr) <- addr["types", ]
-##         addr <- addr[c("long_name", "short_name"), ]
-##         missing.columns <- setdiff(c("locality", "administrative_area_level_2",
-##                                      "administrative_area_level_1", "country",
-##                                      "postal_code"),
-##                                    names(addr))
-##         addr[, missing.columns] <- NA
-##         addr <- addr[, c("locality", "administrative_area_level_2",
-##                          "administrative_area_level_1", "country",
-##                          "postal_code")]
-##         names(addr) <- c("city", "county", "state",
-##                          "country", "postal_code")
-##         addr$state_short <- addr["short_name", "state"]
-##         addr <- addr["long_name", c("city", "county", "state",
-##                                     "state_short", "country", "postal_code")]
-##         row.names(addr) <- NULL
-
-##         gcdf <- cbind(gcdf, addr)
-        
-##         return(gcdf)
-##     }
-##     return(ldply(results, flatten.result))
-## }
-
-## OUTDATED
-## geocode.single <- function(address = NULL, city = NULL,
-##                            state = NULL, zipcode = NULL, ...) {
-##     ## If only address available, work is easy
-##     if(is.null(city) & is.null(state) & is.null(zipcode)) {
-##         location <- data.frame(query = address,
-##                                stringsAsFactors = FALSE)
-##         query <- address
-##     }
-##     else {                              
-##         location <- data.frame(query.address = if.null(address),
-##                                query.city = if.null(city),
-##                                query.state = if.null(state),
-##                                query.zipcode = if.null(zipcode),
-##                                stringsAsFactors = FALSE)
-
-##         ## remove anything bogus
-##         query <- location[!sapply(location, is.na)]
-        
-##         ## paste together
-##         query <- paste(location, collapse = ', ')
-##     }
-
-##     ## Pass along extra data
-##     location <- cbind(location, ...)
-
-##     ## this ALWAYS will return something
-##     tryCatch({
-##         out <- geocode(query, "all")
-##         out <- geocode.parse.google(out$results)
-##         return(out)},
-##              ## we could just return QUERY
-##              error = function(x) return(NULL))
-## }
-
-
 ## loop
-
 
 ## mutli addresses
 
-
+## Parser
 geocode.parse.Google <- function(results) {
     if(results$status != 'OK') {
         warning(paste(results$status,
@@ -128,12 +42,17 @@ geocode.parse.Google <- function(results) {
 
         ## Parse the Address
         addr <- t(ldply(r$address_components, function(l) {
+            if(length(l$types) < 1)     # Sometimes this is empty and throws and
+                                        # error
+                return(NULL)            
             as.data.frame(l, stringsAsFactors = FALSE)[1, ]
         }))
         addr <- as.data.frame(addr, stringsAsFactors = FALSE)
-        
         names(addr) <- addr["types", ]
-        addr <- addr[c("long_name", "short_name"), ]
+
+        ## NOTE: drop = F retains single column data.frames
+        addr <- addr[c("long_name", "short_name"), , drop = F]
+
         original.names <- c("locality", "administrative_area_level_2",
                            "administrative_area_level_1", "country",
                            "postal_code", "street_number", "route",
@@ -152,10 +71,9 @@ geocode.parse.Google <- function(results) {
         addr <- addr["long_name", c("point_of_interest", "establishment",
                                     "street", "city", "county", "state",
                                     "state_short", "country", "postal_code")]
-        row.names(addr) <- NULL
 
+        row.names(addr) <- NULL
         gcdf <- cbind(gcdf, addr)
-        
         return(gcdf)
     }
     return(ldply(results$results, flatten.result))
@@ -202,10 +120,12 @@ reverse.geocode.Google.single <- function(lat, lon, api = NULL) {
 
 ###############################################################################
 ## MapQuest
-###############################################################################
+## 
 ## http://developer.mapquest.com/web/products/open/geocoding-service
 ## DELETE: Fmjtd%7Cluu82l68nd%2Cb2%3Do5-94rgh-f
+###############################################################################
 
+## Parser
 geocode.parse.MapQuest <- function(results) {
     status_code <- results$info$statuscode
     if(status_code != 0) {
@@ -329,9 +249,88 @@ geocode.MapQuest.batch <- function(location, api) {
 
 
 ###############################################################################
-## General Functions
+## US Census
+## http://geocoding.geo.census.gov/geocoder/Geocoding_Services_API.pdf
 ###############################################################################
 
+## Parser
+geocode.parse.Census <- function(results) {
+    ## TODO: Parse Messages
+    results <- results$result$addressMatches
+
+    if(length(results) < 1) {
+        ## warning('No Results \n\t')
+        return(NULL)
+    }
+
+    out <- ldply(results, function(x) {
+        as.data.frame(t(unlist(x)),
+                      stringsAsFactors = F)})
+    
+
+    ## Maps the variables to more readable names
+    ##    - Move this out for speed?
+    ##    - Omits country among other variables
+    var.names <- c(
+        ## various items are DROPPED and may need to be added
+        coordinates.x =          "lon",                
+        coordinates.y =          "lat",                
+        addressComponents.fromAddress = "street.num.1",             
+        addressComponents.toAddress =   "street.num.2",             
+        addressComponents.streetName =  "street.name",
+        addressComponents.city =        "city",
+        addressComponents.state =       "state",
+        addressComponents.zip =         "postal.code",
+        tigerLine.tigerLineId =         'tigerLineID')
+
+    names(out) <- var.names[names(out)]
+    out <- out[, var.names]
+
+    ## Final clean up
+    out$lat <- as.numeric(out$lat)
+    out$lon <- as.numeric(out$lon)
+    out[out == ''] <- NA
+    out
+}
+
+## Single Geocode
+## -- Location
+geocode.Census.single <- function(location, api) {
+    if(is.factor(location))
+        location <- as.character(location)
+
+    callType <- 'locations'
+    ## callType <- 'geographies'
+    
+    call.url <- 'http://geocoding.geo.census.gov/geocoder/'
+    call.url <- paste(call.url,
+                      callType, '/',
+                      'onelineaddress?',
+                      ## '&benchmark=Public_AR_Census2010',
+                      '&benchmark=Public_AR_Current',
+                      '&format=json',
+                      '&vintage=Census2010_Census2010', sep = '')
+    call.url <- paste(call.url, '&address=', location, sep = '')
+    call.url <- URLencode(call.url)
+
+    connect <- url(call.url)
+    out <- readLines(connect, warn = FALSE)
+    close(connect)
+
+    out <- fromJSON(out)
+    geocode.parse.Census(out)
+}
+
+## -- 5-Box
+## street=1090 N Charlotte St&city=Lancaster&state=PA&postalCode=17603
+
+## Reverse
+
+## Geographies
+
+###############################################################################
+## General Functions
+###############################################################################
 geocode.multi <- function(addresses, key = NULL, messaging = 25,
                           geocode.function = geocode.Google.single, ...) {
     if(is.vector(addresses)) {
@@ -344,19 +343,35 @@ geocode.multi <- function(addresses, key = NULL, messaging = 25,
     ## n <- nrow(addresses)
 
     out <- NULL
-    i <- 1
+    i <- 0
     repeat {
+        i <- i + 1
         if(i > n) break
         
         this.record <- addresses[i]
-        this.geo <- geocode.function(this.record, ...)
+
+        err <- tryCatch(
+            this.geo <- geocode.function(this.record, ...),
+            error = function(cond) {
+                message("\n Error at record " %+% i %+% " !!!\n")
+                message(cond)
+                return(NULL)
+            })
 
         if(messaging > 0 && i %% messaging == 0)
             cat("\n -- Processed " %+% i %+% " records --\n")
-        
+       
+        if(is.null(err)) 
+            next   
+                
+        ## if(is.null(this.geo)) {
+        ##     cat("\n !!! Stopped at record " %+% i %+% " !!!\n")
+        ##     break   
+        ## }
+
         if(is.null(this.geo)) {
-            cat("\n !!! Stopped at record " %+% i %+% " !!!\n")
-            break   
+            ## cat("\n !!! No Results at record " %+% i %+% " !!!\n")
+            next   
         }
 
         if(!is.null(key))
@@ -364,8 +379,6 @@ geocode.multi <- function(addresses, key = NULL, messaging = 25,
         else
             this.geo$key <- i
         out <- rbind(out, this.geo)
-        
-        i <- i + 1
     }
     return(out)
 }
@@ -376,9 +389,18 @@ geocode.multi <- function(addresses, key = NULL, messaging = 25,
 ## Scratch
 ###############################################################################
 
-geocode.MapQuest.single("1524 Merrick Ave., Pittsburgh, PA",
-                        "Fmjtd%7Cluu82l68nd%2Cb2%3Do5-94rgh-f")
+## geocode.MapQuest.single("1524 Merrick Ave., Pittsburgh, PA",
+##                         "Fmjtd%7Cluu82l68nd%2Cb2%3Do5-94rghf")
 
-geocode.MapQuest.batch(c("1524 Merrick Ave., Pittsburgh, PA",
-                         "UPMC, Pittsburgh"),
-                        "Fmjtd%7Cluu82l68nd%2Cb2%3Do5-94rghf")
+## geocode.MapQuest.batch(c("1524 Merrick Ave., Pittsburgh, PA",
+##                          "UPMC, Pittsburgh"),
+##                        "Fmjtd%7Cluu82l68nd%2Cb2%3Do5-94rghf")
+
+## geocode.Census.single("1520 Merrick Ave. Pittsburgh, PA")
+
+## geocode.parse.Census(x)
+
+
+## geocode.multi(c("1524 Merrick Ave., Pittsburgh, PA",
+##                 "275 Brookside Blvd., Hinckley, OH"),
+##               geocode.function = geocode.Census.single)

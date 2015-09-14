@@ -10,7 +10,8 @@
 
 ## .libPaths("~/.R/packages")
 options(repos =c(CASE = "http://cran.case.edu/",
-          CMU = "http://lib.stat.cmu.edu/R/CRAN/"))
+            CMU = "http://lib.stat.cmu.edu/R/CRAN/"),
+        stringsAsFactors = FALSE)
 
 .Prompt <- "R> "
 options(prompt = .Prompt)

@@ -17,6 +17,11 @@
 ##      incorporated this into sqlSave.Quick
 ##   5) added sqlComment function to comment on tables
 ##
+##   2015-07-22
+##      Major changes for Redshift and PostgreSQL.
+##      Changes toupper to tolower for tables, schemas, and variables.
+##      Added DATE and BOOL when saving.
+##
 ## TO DO:
 ##   - Add documentation
 ##
@@ -38,121 +43,128 @@
 require(RODBC)
 
 sqlGrant.Quick <- function(table.names, users,
-                           db = "EDW", uid, pwd) {
+                           db = "local", ...) {
     ## ########################################################################
-    ## SQLGRANT.QUICK(TABLE.NAME, USER = "PUBLIC", DB = "EDW")
+    ## SQLGRANT.QUICK(TABLE.NAME, USER = "PUBLIC", DB = "local")
     ## Grants SELECT access to TABLE.NAME for USER.
     ##
     ## PARAMETERS:
     ##   - table.names            - Table to grant SELECT access
     ##   - users                  - Users allow access
-    ##   - db = "EDW", uid = "HILBERTJP", pwd = "J120741h!"          - DB connection
+    ##   - db = "local"          - DB connection
     ##
     ## OUTPUT:
     ##   - NULL
     ##
     ## ########################################################################
-    table.names <- toupper(table.names)
-    users <- toupper(users)
-    oracle <- odbcConnect(db, uid, pwd)
-    data <- sqlQuery(oracle,
+    table.names <- tolower(table.names)
+    users <- tolower(users)
+    dbConn <- odbcConnect(db, ...)
+    data <- sqlQuery(dbConn,
                      paste("GRANT SELECT ON", 
                            rep(table.names, rep(length(users),
                                                length(table.names))),
                            "TO",
                            rep(users, length(table.names)),
                            collapse = "; ") %+% ";")
-    close(oracle)
+    close(dbConn)
 }
 
 sqlComment <- function(table.names, comment = " ",
-                       db = "EDW", uid, pwd) {
+                       db = "local", ...) {
     ## ########################################################################
-    ## SQLCOMMENT(TABLE.NAME, COMMENT = " ", DB = "EDW")
+    ## SQLCOMMENT(TABLE.NAME, COMMENT = " ", DB = "local")
     ## Comments on a TABLE.NAME
     ##
     ## PARAMETERS:
     ##   - table.names            - Table(s) to comment on
     ##   - comment                - Comment (will be repeated for multiple
     ##                              tables)
-    ##   - db = "EDW", uid = "HILBERTJP", pwd = "J120741h!"          - DB connection
+    ##   - db = "local"          - DB connection
     ##
     ## OUTPUT:
     ##   - NULL
     ##
     ## ########################################################################
-    table.names <- toupper(table.names)
-    oracle <- odbcConnect(db, uid, pwd)
+    table.names <- tolower(table.names)
+    dbConn <- odbcConnect(db, ...)
     cmd <- paste("COMMENT ON TABLE ", 
                  table.names,
                  " TO '",
                  rep(comment, length(table.names)),
                  sep = "",
                  collapse = "'; ") %+% "';"
-    data <- sqlQuery(oracle, cmd)
-    close(oracle)
+    data <- sqlQuery(dbConn, cmd)
+    close(dbConn)
 }
 
 sqlDrop.Quick <- function(table.name, schema = NULL,
-                          db = "EDW", uid, pwd) {
+                          db = "local", ...) {
     ## ########################################################################
-    ## SQLDROP.QUICK(TABLE.NAME, DB = "EDW")
+    ## SQLDROP.QUICK(TABLE.NAME, DB = "local")
     ## Similar to sqlDrop, however automatically opens and closes the
     ## connection.
     ##
     ## PARAMETERS:
     ##   - table.name             - Table to drop
     ##   - schema                 - schema of table
-    ##   - db = "EDW", uid = "HILBERTJP", pwd = "J120741h!"          - db connection
+    ##   - db = "local"          - db connection
     ##
     ## OUTPUT:
     ##   - NULL
     ##
     ## ########################################################################
-    oracle <- odbcConnect(db, uid, pwd)
+    dbConn <- odbcConnect(db, ...)
     if(!is.null(schema))
         table.name <- paste(schema, table.name, sep = ".")
-    table.name <- toupper(table.name)
-    sqlDrop(oracle, table.name)
-    close(oracle)
+    table.name <- tolower(table.name)
+    sqlDrop(dbConn, table.name)
+    close(dbConn)
 }
 
 sqlFetch.Quick <- function(table.name, schema = NULL,
-                           db = "EDW", uid, pwd) {
+                           db = "local", ...) {
     if(!is.null(schema))
         table.name <- paste(schema, table.name, sep = ".")
-    table.name <- toupper(table.name)
-    oracle <- odbcConnect("EDW")
-    data <- sqlFetch(oracle, table.name)
-    close(oracle)
+    table.name <- tolower(table.name)
+    dbConn <- odbcConnect(db, ...)
+    data <- sqlFetch(dbConn, table.name)
+    close(dbConn)
     names(data) <- gsub("_", ".", tolower(names(data)))
     return(data)
 }
 
 sqlSave.Quick <- function(data, table.name,
-                          schema = NULL, db = "EDW",
-                          uid, pwd,
+                          schema = NULL, db = "local",
                           varTypes = NULL, ...) {
     if(!is.null(schema))
         table.name <- paste(schema, table.name, sep = ".")
-    table.name <- toupper(table.name)
-    oracle <- odbcConnect(db, uid, pwd)
-    ## sqlDrop(oracle, table.name)
+    table.name <- tolower(table.name)
+    dbConn <- odbcConnect(db, ...)
+    ## sqlDrop(dbConn, table.name)
 
+    dbms.name <- odbcGetInfo(dbConn)["DBMS_Name"]
+  
+    ## Dates / Logical
+    varT <- sapply(data[, setdiff(names(data), names(varTypes))],
+                   class)
+    varT <- varT[varT %in% c('Date', 'logical')]
+    varT <- gsub('logical', getSqlTypeInfo( dbms.name)$logical, varT)
+    varTypes <- c(varTypes, varT)
+    
     ## Correct String Length
-    dbms.name <- odbcGetInfo(oracle)["DBMS_Name"]
-    names(data) <- gsub("[/.]", "_", toupper(names(data)))
-    if(!is.null(varTypes))
-        names(varTypes) <- gsub("[/.]", "_", toupper(names(varTypes)))
-
     add.varTypes <- names(data)[!(names(data) %in% names(varTypes))]
     varTypes <- c(varTypes,
                   sqlCharacterLength(dbms.name, data, add.varTypes))
+   
+    names(data) <- gsub("[/.]", "_", tolower(names(data)))
+    if(!is.null(varTypes))
+        names(varTypes) <- gsub("[/.]", "_", tolower(names(varTypes)))
 
-    sqlSave(oracle, data, tablename = table.name,
+    sqlSave(dbConn, data, tablename = table.name,
             rownames = FALSE, safer = FALSE, varTypes = varTypes, ...)
     
-    close(oracle)
+    close(dbConn)
 }
 
 sqlCharacterLength <- function(dbName, data, var = names(data)) {
@@ -205,3 +217,15 @@ tryCatch(setSqlTypeInfo("Oracle",
                              character="VARCHAR2(255)",
                              logical="VARCHAR2(5)")),
          error = function(x){print("updated ORACLE types")})
+
+
+tryCatch(setSqlTypeInfo("PostgreSQL",
+                        list(double="float8", integer="int4",
+                             character="varchar(255)",
+                             logical="bool")),
+         error = function(x){print("updated PostgreSQL types")})
+
+
+tryCatch(setSqlTypeInfo("Redshift",
+                        getSqlTypeInfo('PostgreSQL')),
+         error = function(x){print("updated Redshift types")})
