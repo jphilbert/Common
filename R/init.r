@@ -18,11 +18,12 @@ options(prompt = .Prompt)
 
 ## Load common packages here
 ## require(RODBC, warn.conflicts = FALSE)
-require(RPostgreSQL, warn.conflicts = FALSE)
 require(plyr, warn.conflicts = FALSE)
 require(reshape2, warn.conflicts = FALSE)
 require(ggplot2, warn.conflicts = FALSE)
-require(dplyr, warn.conflicts = FALSE)
+
+## For some reason doesn't work here
+## require(dplyr, warn.conflicts = FALSE)
 
 ## Common directories
 dir.common <- "~/common/r"

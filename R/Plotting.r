@@ -21,8 +21,8 @@ require(scales)
 require(gridExtra)
 require(RGraphics)                      # offers splitTextGrob(string)
 require(ggthemes)
-src("Geom_Point.r", dir.common)
-src("Geom_TextBox.r", dir.common)
+## src("Geom_Point.r", dir.common)
+## src("Geom_TextBox.r", dir.common)
 ##
 ## TO DO:
 ##   - <NONE>
