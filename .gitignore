@@ -1,3 +1,4 @@
 data/
 system/
 R/sql_import_export.r
+.*
