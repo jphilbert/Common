@@ -210,6 +210,22 @@ sqlCharacterLength <- function(dbName, data, var = names(data)) {
     out
 }
 
+write.S3 <- function(table, file, db = "local", key.file,
+                    truncate.first = TRUE, ...) {
+  keys <- scan(key.file, 'character', quiet = TRUE)  
+  copy.string <- paste0(
+    "COPY ", table, 
+    " FROM 's3://", file, "' CREDENTIALS 'aws_access_key_id=",
+    keys[2], ";aws_secret_access_key=", keys[1], "' ",
+    "CSV DELIMITER ',' IGNOREHEADER AS 1;")
+  
+  dbConn <- odbcConnect(db, ...)
+  if(truncate.first)
+    sqlQuery(dbConn, paste0('TRUNCATE TABLE ', table, ';'))
+  data <- sqlQuery(dbConn, copy.string)
+  close(dbConn)
+  data
+}
 
 
 tryCatch(setSqlTypeInfo("Oracle",
