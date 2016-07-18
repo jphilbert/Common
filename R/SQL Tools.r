@@ -4,7 +4,7 @@
 ##
 ## AUTHOR:	John P. Hilbert
 ## CREATED:    2012-11-13
-## MODIFIED:   2015-01-28
+## MODIFIED:   2016-03-14
 ## 
 ## SUMMARY:
 ##   Currently this file wraps and adds simplicity to sqlSave, sqlFetch, sqlDrop
@@ -167,6 +167,114 @@ sqlSave.Quick <- function(data, table.name,
     close(dbConn)
 }
 
+sqlCreateTable <- function(data, table.name,
+                           schema = NULL, db = "local",
+                           varTypes = NULL, ...) {
+  names(data) <- gsub("[/.]", "_", tolower(names(data)))
+  dbConn <- odbcConnect(db, ...)
+  ## sqlDrop(dbConn, table.name)
+
+  dbms.name <- odbcGetInfo(dbConn)["DBMS_Name"]
+
+  ## Dates / Logical
+  varT <- sapply(data[, setdiff(names(data), names(varTypes))],
+                 class)
+  varT <- varT[varT %in% c('Date', 'logical')]
+  varT <- gsub('logical', getSqlTypeInfo( dbms.name)$logical, varT)
+  varTypes <- c(varTypes, varT)
+  
+  ## Correct String Length
+  add.varTypes <- names(data)[!(names(data) %in% names(varTypes))]
+  varTypes <- c(varTypes,
+                sqlCharacterLength(dbms.name, data, add.varTypes))
+  
+  names(data) <- gsub("[/.]", "_", tolower(names(data)))
+  if(!is.null(varTypes))
+    names(varTypes) <- gsub("[/.]", "_", tolower(names(varTypes)))
+
+  ## All other types
+  types <- sapply(data, typeof)
+  facs <- sapply(data, is.factor)
+  isreal <- (types == "double")
+  isint <- (types == "integer") & !facs
+  islogi <- (types == "logical")
+  colspecs <- rep("varchar(255)", length(data))
+  typeinfo <- sqlTypeInfo(dbConn, "all", errors = FALSE)
+  if (is.data.frame(typeinfo)) {
+    if (any(isreal)) {
+      realinfo <- sqlTypeInfo(dbConn, "double")[, 
+                                                1L]
+      if (length(realinfo) > 0L) {
+        if (length(realinfo) > 1L) {
+          nm <- match("double", tolower(realinfo))
+          if (!is.na(nm)) 
+            realinfo <- realinfo[nm]
+        }
+        colspecs[isreal] <- realinfo[1L]
+      }
+      else {
+        realinfo <- sqlTypeInfo(dbConn, "float")[, 
+                                                 1L]
+        if (length(realinfo) > 0L) {
+          if (length(realinfo) > 1L) {
+            nm <- match("float", tolower(realinfo))
+            if (!is.na(nm)) 
+              realinfo <- realinfo[nm]
+          }
+          colspecs[isreal] <- realinfo[1L]
+        }
+      }
+    }
+    if (any(isint)) {
+      intinfo <- sqlTypeInfo(dbConn, "integer")[, 
+                                                1L]
+      if (length(intinfo) > 0L) {
+        if (length(intinfo) > 1) {
+          nm <- match("integer", tolower(intinfo))
+          if (!is.na(nm)) 
+            intinfo <- intinfo[nm]
+        }
+        colspecs[isint] <- intinfo[1L]
+      }
+    }
+  }
+
+  names(colspecs) <- names(data)
+  if (!missing(varTypes)) {
+    if (!length(nm <- names(varTypes))) 
+      warning("argument 'varTypes' has no names and will be ignored")
+    OK <- names(colspecs) %in% nm
+    colspecs[OK] <- varTypes[names(colspecs)[OK]]
+    notOK <- !(nm %in% names(colspecs))
+    if (any(notOK)) 
+      warning("column(s) ", paste(nm[notOK], collapse = ", "), 
+              " 'data' are not in the names of 'varTypes'")
+  }
+
+  query <- paste0('CREATE TABLE ', table, ' (',
+                  paste(names(colspecs), colspecs, collapse = ', '),
+                  ');')
+  tryCatch(data <- sqlQuery(dbConn, query), finally = close(dbConn))
+  data
+}
+
+write.S3 <- function(table, file, db = "local", key.file,
+                    truncate.first = TRUE, ...) {
+  keys <- scan(key.file, 'character', quiet = TRUE)  
+  copy.string <- paste0(
+    "COPY ", table, 
+    " FROM 's3://", file, "' CREDENTIALS 'aws_access_key_id=",
+    keys[2], ";aws_secret_access_key=", keys[1], "' ",
+    "CSV DELIMITER ',' IGNOREHEADER AS 1;")
+  
+  dbConn <- odbcConnect(db, ...)
+  if(truncate.first)
+    sqlQuery(dbConn, paste0('TRUNCATE TABLE ', table, ';'))
+  data <- sqlQuery(dbConn, copy.string)
+  close(dbConn)
+  data
+}
+
 sqlCharacterLength <- function(dbName, data, var = names(data)) {
     if(length(var) == 0) return(NULL)
     data <- data[, var]
@@ -208,23 +316,6 @@ sqlCharacterLength <- function(dbName, data, var = names(data)) {
                                  sep = ""))
     }
     out
-}
-
-write.S3 <- function(table, file, db = "local", key.file,
-                    truncate.first = TRUE, ...) {
-  keys <- scan(key.file, 'character', quiet = TRUE)  
-  copy.string <- paste0(
-    "COPY ", table, 
-    " FROM 's3://", file, "' CREDENTIALS 'aws_access_key_id=",
-    keys[2], ";aws_secret_access_key=", keys[1], "' ",
-    "CSV DELIMITER ',' IGNOREHEADER AS 1;")
-  
-  dbConn <- odbcConnect(db, ...)
-  if(truncate.first)
-    sqlQuery(dbConn, paste0('TRUNCATE TABLE ', table, ';'))
-  data <- sqlQuery(dbConn, copy.string)
-  close(dbConn)
-  data
 }
 
 
