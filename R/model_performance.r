@@ -224,19 +224,32 @@ PerformanceMeasures <-
 ###############################################################################
 ## Plots
 ###############################################################################
-Plot_ROC <- function(data,
+Plot_ROC <- function(data, 
                      sensitivity = !!sym("sens"),
-                     specificity = !!sym("spec")) {
+                     specificity = !!sym("spec"),
+                     add_bounds = T) {
   sensitivity <- enquo(sensitivity)
   specificity <- enquo(specificity)
+  data <-  data %>% mutate(.y = !!sensitivity, .x = 1-!!specificity)
+  
+  if(add_bounds) {
+    data <- data %>%
+      do(bind_rows(mutate(., .x = 0, .y = 0) %>% head(1), .)) %>%
+      do(bind_rows(mutate(., .x = 1, .y = 1) %>% head(1), .))
+  }
+  
   if(length(group_vars(data)) < 1)
     plot <- data %>%
-      ggplot(aes(y = !!sensitivity, x = 1-!!specificity)) 
+      ggplot(aes(y = y, .x = .x)) 
   else
     plot <- data %>%
-      unite('grp', group_vars(data), sep = ' - ') %>%
-      ggplot(aes(y = !!sensitivity, x = 1-!!specificity, color = grp)) +
+      arrange_at(group_vars(.)) %>%
+      unite('grp', group_vars(.), sep = ' - ') %>%
+      ungroup() %>%
+      mutate(grp = as.factor(grp) %>% fct_reorder(row_number())) %>%
+      ggplot(aes(y = .y, x = .x, color = grp)) +
       scale_color_hue(group_vars(data) %>% str_c(collapse = ' - '))
+
 
   plot +
     geom_line() +
@@ -247,19 +260,57 @@ Plot_ROC <- function(data,
     theme_bw()
 }
 
+Plot_PR <- function(data,
+                     precision = !!sym("prec"),
+                     recall = !!sym("sens")) {
+  precision <- enquo(precision)
+  recall <- enquo(recall)
+  data <-  data %>% mutate(.y = !!precision, .x = !!recall)
+  
+  if(length(group_vars(data)) < 1)
+    plot <- data %>%
+      ggplot(aes(y = .y, x = .x)) 
+  else
+    plot <- data %>%
+      arrange_at(group_vars(.)) %>%
+      unite('grp', group_vars(.), sep = ' - ') %>%
+      ungroup() %>%
+      mutate(grp = as.factor(grp) %>% fct_reorder(row_number())) %>%
+      ggplot(aes(y = .y, x = .x, color = grp)) +
+      scale_color_hue(group_vars(data) %>% str_c(collapse = ' - '))
+
+  plot +
+    geom_line() +
+    scale_x_continuous("Recall", limits = c(0, 1), label = percent) +
+    scale_y_continuous("Precision", limits = c(0, 1), label = percent) +
+    coord_equal() +
+    theme_bw()
+}
+
 
 Plot_Lift <- function(data,
                      lift = !!sym("lift"),
-                     freq = !!sym("p_predicted")) {
+                     freq = !!sym("p_predicted"),
+                     add_bounds = T) {
   lift <- enquo(lift)
   freq <- enquo(freq)
+  data <-  data %>% mutate(.y = !!lift, .x = !!freq)
+
+   if(add_bounds) {
+    data <- data %>%
+      do(bind_rows(mutate(., .x = 1, .y = 1) %>% head(1), .)) 
+  }
+  
   if(length(group_vars(data)) < 1)
     plot <- data %>%
-      ggplot(aes(y = !!lift, x = !!freq)) 
-  else
+      ggplot(aes(y = .y, x = .x)) 
+  else 
     plot <- data %>%
-      unite('grp', group_vars(data), sep = ' - ') %>%
-      ggplot(aes(y = !!lift, x = !!freq, color = grp)) +
+      arrange_at(group_vars(.)) %>%
+      unite('grp', group_vars(.), sep = ' - ') %>%
+      ungroup() %>%
+      mutate(grp = as.factor(grp) %>% fct_reorder(row_number())) %>%
+      ggplot(aes(y = .y, x = .x, color = grp)) +
       scale_color_hue(group_vars(data) %>% str_c(collapse = ' - '))
 
   plot +
@@ -269,4 +320,13 @@ Plot_Lift <- function(data,
                        limits = c(0, NA), label = percent) +
     scale_y_continuous("Lift", limits = c(1, NA)) +
     theme_bw()
+}
+
+
+Lift_Reference <- function(prevalence = 0.5) {
+  list(geom_hline(yintercept = 1/prevalence, linetype = 2),
+       geom_vline(xintercept = prevalence, linetype = 2),
+       geom_line(data = data.frame(x = seq(prevalence, 1, 0.01)) %>%
+                   mutate(y = 1/x),
+                 aes(x = x, y = y, color = NULL), linetype = 2))
 }
